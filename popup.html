@@ -1,6 +1,102 @@
-<html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>ClearRead</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
   <body>
     <h1>ClearRead</h1>
+
+    <!-- Choose what part of the page the extension changes. -->
+    <section>
+      <h2>Reading Mode</h2>
+      <label>
+        <input type="radio" name="reading-mode" value="selection" checked>
+        Selection
+      </label>
+      <label>
+        <input type="radio" name="reading-mode" value="full-page">
+        Full Page
+      </label>
+    </section>
+
+    <!-- Text-to-Speech has an extra speed control when it is turned on. -->
+    <section>
+      <h2>Text-to-Speech</h2>
+      <label>
+        <input id="tts-toggle" type="checkbox">
+        Text-to-Speech
+      </label>
+      <div id="tts-speed-section" hidden>
+        <label for="tts-speed">Speed: <span id="tts-speed-value">1.0x</span></label>
+        <input id="tts-speed" type="range" min="0.5" max="3" step="0.1" value="1">
+      </div>
+    </section>
+
+    <!-- These controls change how text looks. -->
+    <section>
+      <label for="font-select">Font</label>
+      <select id="font-select">
+        <option value="">Default</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Calibri, sans-serif">Calibri</option>
+        <option value="Century Gothic, sans-serif">Century Gothic</option>
+        <option value="Futura, sans-serif">Futura</option>
+        <option value="Helvetica, Arial, sans-serif">Helvetica</option>
+        <option value="Tahoma, sans-serif">Tahoma</option>
+        <option value="Verdana, sans-serif">Verdana</option>
+      </select>
+    </section>
+
+    <section>
+      <label for="font-size-input">Font Size (px)</label>
+      <label>
+        <input id="font-size-default" type="checkbox" checked>
+        Default
+      </label>
+      <input id="font-size-input" type="number" min="12" max="40" value="18" disabled>
+    </section>
+
+    <section>
+      <label for="line-height-select">Line Height</label>
+      <select id="line-height-select">
+        <option value="">Default</option>
+        <option value="2.0">Comfortable</option>
+        <option value="2.6">Relaxed</option>
+        <option value="3.2">Spacious</option>
+      </select>
+    </section>
+
+    <section>
+      <label for="word-spacing-select">Word Spacing</label>
+      <select id="word-spacing-select">
+        <option value="">Default</option>
+        <option value="0.4em">Comfortable</option>
+        <option value="0.8em">Relaxed</option>
+        <option value="1.2em">Spacious</option>
+      </select>
+    </section>
+
+    <section>
+      <label for="letter-spacing-select">Letter Spacing</label>
+      <select id="letter-spacing-select">
+        <option value="">Default</option>
+        <option value="0.14em">Comfortable</option>
+        <option value="0.28em">Relaxed</option>
+        <option value="0.42em">Spacious</option>
+      </select>
+    </section>
+
+    <!-- The preview shows the user what the settings may look like. -->
+    <section>
+      <h2>Preview</h2>
+      <p id="preview-text">Reading should feel clear and comfortable.</p>
+    </section>
+
+    <button type="button" id="apply-button">Apply</button>
+
+    <!-- The script is last so the page controls exist before JS uses them. -->
     <script src="popup.js"></script>
   </body>
 </html>

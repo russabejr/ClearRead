@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  border-radius: 18px;
+  background: transparent;
+  overflow: hidden;
+}
+
+body {
+  width: 300px;
+  margin: 0;
+  padding: 16px;
+  font-family: Arial, sans-serif;
+  color: #24303f;
+  background:
+    linear-gradient(145deg, rgba(232, 244, 255, 0.95), rgba(246, 250, 255, 0.88)),
+    #f5f9ff;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+/* Main popup title. */
+h1 {
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(124, 180, 236, 0.35);
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f3854;
+}
+
+/* Each section has a soft glass card style. */
+section {
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 8px 24px rgba(79, 142, 212, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+/* Some sections use h2 and some use the first label as the title. */
+h2,
+section > label:first-child {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #23527f;
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Radio and checkbox labels should feel lighter than section titles. */
+label:has(input[type="radio"]),
+label:has(input[type="checkbox"]) {
+  font-weight: 400;
+}
+
+select,
+input[type="number"],
+input[type="range"],
+button {
+  width: 100%;
+}
+
+/* Shared style for typed and picked values. */
+select,
+input[type="number"] {
+  min-height: 34px;
+  padding: 6px 8px;
+  border: 1px solid rgba(109, 171, 238, 0.45);
+  border-radius: 10px;
+  color: #24303f;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+/* Keep keyboard focus easy to see. */
+select:focus,
+input[type="number"]:focus {
+  outline: 2px solid rgba(58, 151, 246, 0.45);
+  outline-offset: 1px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin-right: 6px;
+  accent-color: #3a97f6;
+}
+
+/* Match the slider color to the main button. */
+input[type="range"] {
+  accent-color: #3a97f6;
+}
+
+input:disabled,
+select:disabled {
+  color: #66778a;
+  background: rgba(226, 236, 247, 0.75);
+}
+
+#tts-speed-section {
+  margin-top: 8px;
+}
+
+/* The preview is larger so the changes are easier to notice. */
+#preview-text {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid rgba(109, 171, 238, 0.38);
+  border-radius: 10px;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+/* The main action button also changes to Revert in JavaScript. */
+#apply-button {
+  min-height: 38px;
+  border: 1px solid #2285ed;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #3a97f6;
+  box-shadow: 0 8px 18px rgba(58, 151, 246, 0.28);
+  cursor: pointer;
+}
+
+#apply-button:hover {
+  background: #238bf3;
+}
+
+#apply-button:active {
+  background: #1679d8;
+}
