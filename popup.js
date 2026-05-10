@@ -18,6 +18,7 @@ const settingsControls = [
 const savedSettingsKey = "clearReadSettings";
 
 let settingsAreApplied = false;
+let isSpeechPaused = false;
 
 // Show the speed slider only when Text-to-Speech is on.
 function updateTextToSpeechOptions() {
@@ -104,6 +105,27 @@ function setControlsLocked(locked) {
   applyButton.textContent = locked ? "Revert" : "Apply";
 }
 
+// Pause or resume Text-to-Speech playback when the button is clicked.
+function pauseorResumeTTS() {
+  if (!ttsToggle.checked) {
+    return;
+  }
+
+
+  if (isSpeechPaused) {
+    chrome.tts.resume();
+    isSpeechPaused = false;
+    pauseButton.textContent = "Pause";
+  } else {
+    chrome.tts.pause();
+    isSpeechPaused = true;
+    pauseButton.textContent = "Resume";
+  }
+}
+
+
+
+
 // Load content.js, then ask it to do one page action.
 async function runPageAction(actionName, args = []) {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -182,5 +204,17 @@ settingsControls.forEach((control) => {
 });
 
 applyButton.addEventListener("click", handleApplyButtonClick);
+
+startPopup();
+
+// pause event listener needs to be added after startPopup() because it relies on the ttsToggle state which is set in loadSettings()
+settingsControls.forEach((control) => {
+  control.addEventListener("input", handleSettingsChange);
+  control.addEventListener("change", handleSettingsChange);
+});
+
+
+applyButton.addEventListener("click", handleApplyButtonClick);
+pauseButton.addEventListener("click", pauseorResumeTTS);
 
 startPopup();
