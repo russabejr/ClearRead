@@ -23,6 +23,8 @@ let isSpeechPaused = false;
 // Show the speed slider only when Text-to-Speech is on.
 function updateTextToSpeechOptions() {
   ttsSpeedSection.hidden = !ttsToggle.checked;
+  pauseButton.hidden = !ttsToggle.checked;
+  pauseButton.disabled = !ttsToggle.checked;
 }
 
 // Show the current speech speed next to the slider.
@@ -154,6 +156,8 @@ async function handleApplyButtonClick() {
 
     settingsAreApplied = false;
     speechSynthesis.cancel();
+    isSpeechPaused = false;
+    pauseButton.textContent = "Pause";
     setControlsLocked(false);
     return;
   }
@@ -213,7 +217,7 @@ applyButton.addEventListener("click", handleApplyButtonClick);
 pauseButton.addEventListener("click", pauseOrResumeTTS);
 
 ttsToggle.addEventListener("change", () => {
-  pauseButton.disabled = !ttsToggle.checked;
+  updateTextToSpeechOptions();
 
   if (!ttsToggle.checked) {
     speechSynthesis.cancel();
