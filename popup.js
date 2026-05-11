@@ -4,7 +4,7 @@ const ttsSpeed = document.getElementById("tts-speed");
 const ttsSpeedValue = document.getElementById("tts-speed-value");
 const previewText = document.getElementById("preview-text");
 const applyButton = document.getElementById("apply-button");
-
+const pauseButton = document.getElementById("pause-button");
 const fontSelect = document.getElementById("font-select");
 const fontSizeDefault = document.getElementById("font-size-default");
 const fontSizeInput = document.getElementById("font-size-input");
@@ -105,21 +105,19 @@ function setControlsLocked(locked) {
   applyButton.textContent = locked ? "Revert" : "Apply";
 }
 
-// Pause or resume Text-to-Speech playback when the button is clicked.
-function pauseorResumeTTS() {
-  if (!ttsToggle.checked) {
-    return;
-  }
+// Pause or resume 
+function pauseOrResumeTTS() {
+  if (!ttsToggle.checked) return;
 
-
-  if (isSpeechPaused) {
-    chrome.tts.resume();
-    isSpeechPaused = false;
-    pauseButton.textContent = "Pause";
-  } else {
-    chrome.tts.pause();
+  if (speechSynthesis.speaking && !speechSynthesis.paused) {
+    speechSynthesis.pause();
     isSpeechPaused = true;
     pauseButton.textContent = "Resume";
+  } 
+  else if (speechSynthesis.paused) {
+    speechSynthesis.resume();
+    isSpeechPaused = false;
+    pauseButton.textContent = "Pause";
   }
 }
 
@@ -155,7 +153,7 @@ async function handleApplyButtonClick() {
     }
 
     settingsAreApplied = false;
-    chrome.tts.stop();
+    speechSynthesis.cancel();
     setControlsLocked(false);
     return;
   }
@@ -172,14 +170,18 @@ async function handleApplyButtonClick() {
   setControlsLocked(true);
 
   // Read the changed text aloud if Text-to-Speech is on.
-  if (settings.textToSpeech && result.text.trim()) {
-    chrome.tts.stop();
-    chrome.tts.speak(result.text, {
-      rate: settings.speechRate
-    });
-  }
+if (settings.textToSpeech && result.text.trim()) {
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(result.text);
+  utterance.rate = settings.speechRate;
+
+  isSpeechPaused = false;
+  pauseButton.textContent = "Pause";
+  speechSynthesis.speak(utterance);
 }
 
+}
 // Any control change updates the preview and saves the new settings.
 async function handleSettingsChange() {
   updateTextToSpeechOptions();
@@ -194,6 +196,10 @@ async function startPopup() {
   await loadSettings();
   await handleSettingsChange();
 
+  pauseButton.disabled = !ttsToggle.checked;
+  pauseButton.textContent = "Pause";
+  isSpeechPaused = false;
+
   settingsAreApplied = await runPageAction("isApplied");
   setControlsLocked(settingsAreApplied);
 }
@@ -204,17 +210,19 @@ settingsControls.forEach((control) => {
 });
 
 applyButton.addEventListener("click", handleApplyButtonClick);
+pauseButton.addEventListener("click", pauseOrResumeTTS);
 
-startPopup();
+ttsToggle.addEventListener("change", () => {
+  pauseButton.disabled = !ttsToggle.checked;
 
-// pause event listener needs to be added after startPopup() because it relies on the ttsToggle state which is set in loadSettings()
-settingsControls.forEach((control) => {
-  control.addEventListener("input", handleSettingsChange);
-  control.addEventListener("change", handleSettingsChange);
+  if (!ttsToggle.checked) {
+    speechSynthesis.cancel();
+    isSpeechPaused = false;
+    pauseButton.textContent = "Pause";
+  } else {
+    isSpeechPaused = false;
+    pauseButton.textContent = "Pause";
+  }
 });
-
-
-applyButton.addEventListener("click", handleApplyButtonClick);
-pauseButton.addEventListener("click", pauseorResumeTTS);
 
 startPopup();
